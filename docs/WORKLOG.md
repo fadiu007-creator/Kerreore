@@ -2,36 +2,41 @@
 
 ## 2026-08-23
 
-### Started project
-- Confirmed the new GitHub repository: `fadiu007-creator/Kerreore`.
-- Confirmed repository is public, empty, and uses `main` as the default branch.
-- Defined Kerreore as a peer-to-peer hourly car-rental marketplace.
-- Created the initial product and technical plan in `docs/PLAN.md`.
-- Established phased delivery: foundation → marketplace UI → owner experience → backend/accounts → payments/trust → production.
-- Established the worklog convention: record completed work here as the implementation progresses.
+### Project start
+- Confirmed `fadiu007-creator/Kerreore` as the new repository.
+- Defined Kerreore as a peer-to-peer marketplace for hourly car rentals.
+- Created `docs/PLAN.md` with product, UX, domain, security, payments, localization, and delivery planning.
+- Established this worklog as the source of truth for completed implementation.
 
-### Foundation implementation completed
-- Added Next.js/React/TypeScript project manifest in `package.json`.
-- Added strict TypeScript configuration.
-- Added Next.js type declarations and PostCSS/Tailwind configuration.
-- Added global design tokens and responsive styling in `app/globals.css`.
-- Added root application metadata/layout in `app/layout.tsx`.
-- Built the first modern Kerreore marketplace homepage in `app/page.tsx`.
-- Added responsive navigation, hero section, location/time/duration search panel, vehicle cards, trust/value section, owner CTA, and footer.
-- Added Lucide iconography and responsive mobile-first layouts.
-- Added initial README with setup and project status.
+### Foundation completed
+- Next.js + React + TypeScript project scaffold.
+- Tailwind/PostCSS configuration and global design tokens.
+- Root metadata/layout and responsive marketplace shell.
+- Modern homepage with discovery search, vehicle cards, trust section and owner CTA.
 
-### Marketplace discovery milestone completed
-- Added centralized typed vehicle domain data in `lib/cars.ts` with six sample vehicles.
-- Added `/cars` marketplace results page with location context, filters, sorting control, availability badges, ratings, and hourly pricing.
-- Added dynamic `/cars/[id]` vehicle detail route.
-- Added vehicle detail imagery, specifications, features, owner/trust information, location, rating, and hourly booking panel.
-- Added date, start-time, and duration controls to the booking panel.
-- Added homepage navigation into the real marketplace results and vehicle detail routes.
-- Added `/dashboard/cars/new` as the owner vehicle-listing entry point with core vehicle fields and photo area.
-- Kept booking/payment persistence intentionally disabled until the backend phase.
+### Marketplace completed
+- Typed vehicle domain data with six sample cars.
+- `/cars` discovery/results experience with filters, sorting, ratings, hourly prices and availability.
+- `/cars/[id]` vehicle detail experience with specifications, features, owner/trust information and booking controls.
+- Homepage discovery links connected to marketplace routes.
 
-### Git commits completed
+### Owner experience completed for MVP UI
+- `/dashboard` owner studio with active cars, earnings, booked hours and next-booking overview.
+- `/dashboard/bookings` owner booking management view.
+- `/dashboard/cars/new` interactive vehicle listing form with validation and draft-save UI.
+- `/bookings` renter booking history/upcoming bookings view.
+- `/login` sign-in/create-account entry experience.
+
+### Backend foundation completed
+- Added `supabase/schema.sql` covering profiles, vehicles, images, availability rules, bookings, indexes and initial row-level security policies.
+- Added `.env.example` documenting Supabase and Stripe configuration required for production.
+- Added `/api/availability` server endpoint that validates requested time ranges and fails closed until persistent booking storage is configured.
+- Production pricing/availability is intentionally not trusted from client-side UI.
+
+### Important implementation boundary
+The repository now contains a complete, coherent MVP frontend and production-oriented database contract. Real authentication, persistent bookings, file storage, payment processing/payouts, and deployment require external service credentials/configuration and therefore are not falsely marked as live.
+
+### Git history through this milestone
 - `695577c` — initial product/technical plan
 - `9496972` — initial worklog
 - `711c1dd` — Next.js scaffold
@@ -47,19 +52,25 @@
 - `3990e5f` — vehicle detail and hourly booking panel
 - `3744ba5` — homepage marketplace routing
 - `a70276c` — owner vehicle listing entry point
+- `17a9cda` — renter bookings dashboard
+- `d59df8b` — owner dashboard
+- `217e4b8` — interactive vehicle listing form
+- `90760e6` — owner booking management
+- `62c60bd` — authentication entry screen
+- `fd3cb37` — production database schema
+- `91fc7f2` — environment variable template
+- `7af80a3` — availability validation endpoint
 
-### Status
-- Phase 0: **complete enough to enter marketplace build**
-- Planning: **complete**
-- Frontend foundation: **complete**
-- Marketplace homepage: **complete**
-- Search/results page: **complete**
-- Vehicle detail flow: **complete for UI prototype**
-- Owner listing UI: **started**
-- Backend/auth/database: **not started**
-- Payments: **not started**
-- Production deployment: **not started**
+### Current completion
+- Product planning: **100%**
+- Core frontend MVP: **100%**
+- Owner/renter UI flows: **100%**
+- Production database contract: **100%**
+- Real authentication: **not configured**
+- Persistent production booking: **not configured**
+- Payments/payouts: **not configured**
+- File storage: **not configured**
+- Deployment verification: **not performed**
 
-### Next milestone
-- Build real owner dashboard and availability management.
-- Then introduce authentication and PostgreSQL persistence so availability and bookings become real rather than demo data.
+### Final handoff condition
+The codebase is ready for external-service wiring. It should not be represented as a production-live rental marketplace until authentication, database, storage, payment/payouts, security review, and deployment verification are configured and tested.
