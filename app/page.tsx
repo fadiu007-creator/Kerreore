@@ -8,7 +8,7 @@ export default function Home() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-6 md:px-8">
         <Link href="/" className="text-2xl font-black tracking-[-0.06em]">kerreore<span className="text-lime-500">.</span></Link>
         <div className="hidden items-center gap-8 text-sm font-semibold md:flex"><Link href="/cars" className="hover:opacity-60">Find a car</Link><a href="#how" className="hover:opacity-60">How it works</a><a href="#owner" className="hover:opacity-60">List your car</a></div>
-        <button className="rounded-full border border-black/10 bg-white px-5 py-2.5 text-sm font-bold shadow-sm">Sign in</button>
+        <Link href="/login" className="rounded-full border border-black/10 bg-white px-5 py-2.5 text-sm font-bold shadow-sm">Sign in</Link>
       </nav>
 
       <section className="mx-auto max-w-7xl px-5 pb-16 pt-8 md:px-8 md:pt-16">
