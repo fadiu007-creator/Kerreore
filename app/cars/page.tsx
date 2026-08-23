@@ -1,38 +1,4 @@
-import { ArrowLeft, CarFront, Check, ChevronDown, MapPin, SlidersHorizontal, Star } from "lucide-react";
+import { ArrowLeft, CarFront, Check, MapPin } from "lucide-react";
 import Link from "next/link";
-import { cars } from "@/lib/cars";
-
-const filters = ["All cars", "Automatic", "Electric", "Hybrid", "Under €10/h"];
-
-export default function CarsPage() {
-  return (
-    <main className="min-h-screen">
-      <header className="border-b border-black/8 bg-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 md:px-8">
-          <Link href="/" className="text-2xl font-black tracking-[-0.06em]">kerreore<span className="text-lime-500">.</span></Link>
-          <Link href="/" className="flex items-center gap-2 text-sm font-bold"><ArrowLeft size={16}/> Home</Link>
-        </div>
-      </header>
-
-      <section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-12">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <div><div className="mb-3 flex items-center gap-2 text-sm font-bold text-black/50"><MapPin size={16}/> Pristina, Kosovo</div><h1 className="text-4xl font-black tracking-[-0.05em] md:text-5xl">Cars available now</h1><p className="mt-3 max-w-xl text-black/50">Choose a car, pick your hours, and get moving. All prices are shown per hour.</p></div>
-          <button className="flex w-fit items-center gap-2 rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-bold"><SlidersHorizontal size={17}/> Filters</button>
-        </div>
-
-        <div className="mt-8 flex gap-2 overflow-x-auto pb-2">
-          {filters.map((filter, index) => <button key={filter} className={`whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-bold ${index === 0 ? "bg-black text-white" : "border border-black/10 bg-white"}`}>{index === 0 && <Check size={14} className="mr-1.5 inline"/>}{filter}</button>)}
-        </div>
-
-        <div className="mt-8 flex items-center justify-between border-y border-black/8 py-4 text-sm"><span className="font-bold">{cars.length} cars</span><button className="flex items-center gap-2 font-bold text-black/60">Recommended <ChevronDown size={15}/></button></div>
-
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {cars.map((car) => <Link href={`/cars/${car.id}`} key={car.id} className="group overflow-hidden rounded-3xl border border-black/8 bg-white transition hover:-translate-y-1 hover:shadow-xl">
-            <div className="relative aspect-[4/3] overflow-hidden bg-[#e8e8e2]"><img src={car.image} alt={car.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105"/><span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-xs font-black">Available</span><span className="absolute right-4 top-4 rounded-full bg-black/75 px-3 py-1.5 text-xs font-black text-white">€{car.price}/h</span></div>
-            <div className="p-5"><div className="flex justify-between gap-3"><div><h2 className="font-black">{car.name}</h2><p className="mt-1 text-sm text-black/50">{car.year} · {car.transmission} · {car.seats} seats</p></div><div className="flex items-center gap-1 text-sm font-bold"><Star size={14} fill="currentColor"/> {car.rating}</div></div><div className="mt-5 flex items-center justify-between border-t border-black/8 pt-4"><span className="flex items-center gap-1.5 text-sm text-black/50"><MapPin size={14}/> {car.location}</span><span className="text-sm font-black">View car →</span></div></div>
-          </Link>)}
-        </div>
-      </section>
-    </main>
-  );
-}
+import { createClient } from "@/lib/supabase/server";
+export default async function CarsPage(){const supabase=await createClient();const{data:cars}=await supabase.from("kerreore_vehicles").select("id,make,model,year,hourly_rate,location,transmission,fuel,seats,description").eq("published",true).order("created_at",{ascending:false});const ids=(cars??[]).map(c=>c.id);const{data:images}=ids.length?await supabase.from("kerreore_vehicle_images").select("vehicle_id,storage_path,sort_order").in("vehicle_id",ids).order("sort_order"):({data:[]} as any);const firstImage=new Map((images??[]).map(i=>[i.vehicle_id,`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/kerreore-vehicles/${i.storage_path}`]));return <main className="min-h-screen bg-[#f7f7f4]"><header className="border-b border-black/8 bg-white"><div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 md:px-8"><Link href="/" className="text-2xl font-black tracking-[-.06em]">kerreore<span className="text-lime-500">.</span></Link><Link href="/" className="flex items-center gap-2 text-sm font-bold"><ArrowLeft size={16}/> Home</Link></div></header><section className="mx-auto max-w-7xl px-5 py-10 md:px-8"><div className="flex items-end justify-between gap-6"><div><div className="mb-3 flex items-center gap-2 text-sm font-bold text-black/50"><MapPin size={16}/> Kosovo</div><h1 className="text-4xl font-black tracking-[-.05em] md:text-5xl">Cars available by the hour</h1><p className="mt-3 text-black/50">Real provider listings approved by Kerreore admin.</p></div><Link href="/login" className="rounded-full bg-black px-5 py-3 text-sm font-black text-white">List your car</Link></div><div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{(cars??[]).map(car=><Link href={`/cars/${car.id}`} key={car.id} className="group overflow-hidden rounded-3xl border border-black/8 bg-white transition hover:-translate-y-1 hover:shadow-xl"><div className="relative aspect-[4/3] overflow-hidden bg-[#e8e8e2]">{firstImage.get(car.id)?<img src={firstImage.get(car.id)} alt={`${car.make} ${car.model}`} className="h-full w-full object-cover transition duration-500 group-hover:scale-105"/>:<div className="grid h-full place-items-center"><CarFront size={44}/></div>}<span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-xs font-black">Approved</span><span className="absolute right-4 top-4 rounded-full bg-black/80 px-3 py-1.5 text-xs font-black text-white">€{car.hourly_rate}/h</span></div><div className="p-5"><h2 className="font-black">{car.make} {car.model}</h2><p className="mt-1 text-sm text-black/50">{car.year} · {car.transmission} · {car.fuel} · {car.seats} seats</p><div className="mt-5 flex items-center justify-between border-t border-black/8 pt-4"><span className="text-sm text-black/50">{car.location}</span><span className="text-sm font-black">Book →</span></div></div></Link>)}{!cars?.length&&<div className="rounded-3xl border border-dashed border-black/15 bg-white p-12 text-center sm:col-span-2 lg:col-span-3"><p className="font-black">No approved cars yet.</p><p className="mt-2 text-sm text-black/45">Provider listings appear here after admin approval.</p></div>}</div></section></main>}
