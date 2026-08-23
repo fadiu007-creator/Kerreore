@@ -26,4 +26,4 @@ Then open the local Next.js development URL.
 
 ## Status
 
-Phase 0 foundation is underway. The current branch contains the initial marketplace shell and homepage UI; backend, authentication, persistence, payments, and production booking logic are intentionally subsequent phases.
+Production deployment trigger: 2026-08-23. GitHub is the deployment source for the Vercel Kerreore project.
