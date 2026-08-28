@@ -71,14 +71,14 @@ export default function CarDetail() {
           </section>
           <aside className="lg:sticky lg:top-6 lg:self-start">
             <div className="rounded-[2rem] border border-black/8 bg-white p-6 shadow-xl">
-              <p className="text-sm font-bold text-black/45">{car.location} \u00b7 {car.year}</p>
+              <p className="text-sm font-bold text-black/45">{car.location} · {car.year}</p>
               <h1 className="mt-1 text-3xl font-black">{car.make} {car.model}</h1>
               <p className="mt-4 text-sm leading-6 text-black/55">{car.description || t(lang, "car_default_description")}</p>
               <div className="mt-5 grid grid-cols-2 gap-2 text-sm">
                 <div className="rounded-2xl bg-[#f5f5f0] p-4"><b>{car.transmission}</b><p className="text-black/45">{t(lang, "car_transmission")}</p></div>
                 <div className="rounded-2xl bg-[#f5f5f0] p-4"><b>{car.fuel}</b><p className="text-black/45">{t(lang, "car_fuel")}</p></div>
                 <div className="rounded-2xl bg-[#f5f5f0] p-4"><b>{car.seats}</b><p className="text-black/45">{t(lang, "car_seats")}</p></div>
-                <div className="rounded-2xl bg-[#f5f5f0] p-4"><b>\u20ac{car.hourly_rate}/h</b><p className="text-black/45">{t(lang, "car_hourly")}</p></div>
+                <div className="rounded-2xl bg-[#f5f5f0] p-4"><b>€{car.hourly_rate}/h</b><p className="text-black/45">{t(lang, "car_hourly")}</p></div>
               </div>
               <div className="my-6 border-t border-black/8 pt-6">
                 <p className="mb-3 text-sm font-black">{t(lang, "car_choose_time")}</p>
@@ -88,7 +88,7 @@ export default function CarDetail() {
                   <label className="rounded-2xl border border-black/10 p-3 text-sm"><span className="block text-xs font-bold text-black/40">{t(lang, "car_hours")}</span><select value={duration} onChange={(e) => setDuration(Number(e.target.value))} className="mt-1 w-full font-bold outline-none">{[1,2,3,4,5,6,8,12,24].map((n) => <option key={n} value={n}>{n}</option>)}</select></label>
                 </div>
                 <div className="flex items-end justify-between">
-                  <div><span className="text-3xl font-black">\u20ac{total.toFixed(2)}</span><p className="text-xs text-black/40">{duration} {t(lang, "car_hour_unit")} \u00d7 \u20ac{car.hourly_rate}</p></div>
+                  <div><span className="text-3xl font-black">€{total.toFixed(2)}</span><p className="text-xs text-black/40">{duration} {t(lang, "car_hour_unit")} × €{car.hourly_rate}</p></div>
                   <button disabled={busy} onClick={book} className="rounded-2xl bg-[#b7ff3c] px-5 py-4 font-black disabled:opacity-50">{busy ? t(lang, "car_booking_busy") : t(lang, "car_request_booking")}</button>
                 </div>
               </div>

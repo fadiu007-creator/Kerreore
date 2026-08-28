@@ -72,10 +72,10 @@ export default async function Home() {
                   </div>
                   <div className="p-5">
                     <div className="flex items-start justify-between gap-4">
-                      <div><h3 className="font-black">{car.make} {car.model}</h3><p className="mt-1 text-sm text-black/50">{car.year} \u00b7 {car.transmission} \u00b7 {car.seats} {t(lang, "home_seats")}</p></div>
+                      <div><h3 className="font-black">{car.make} {car.model}</h3><p className="mt-1 text-sm text-black/50">{car.year} · {car.transmission} · {car.seats} {t(lang, "home_seats")}</p></div>
                     </div>
                     <div className="mt-5 flex items-end justify-between border-t border-black/8 pt-4">
-                      <div><span className="text-2xl font-black">\u20ac{car.hourly_rate}</span><span className="text-sm text-black/45"> {t(lang, "home_per_hour")}</span></div>
+                      <div><span className="text-2xl font-black">€{car.hourly_rate}</span><span className="text-sm text-black/45"> {t(lang, "home_per_hour")}</span></div>
                       <span className="rounded-full bg-black px-4 py-2 text-sm font-bold text-white">{t(lang, "home_view_car")}</span>
                     </div>
                   </div>
