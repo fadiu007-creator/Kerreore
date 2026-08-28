@@ -179,6 +179,17 @@ const sq: Dict = {
   admin_no_listings: "Ende s'ka shpallje automjetesh.",
   admin_footer_note: "Autorizimi zbatohet nga serveri; p\u00ebrdit\u00ebsimet e moderimit mbrohen nga RLS i Supabase.",
 
+  reset_title: "Rivendos fjalkalimin",
+  reset_subtitle: "Vendos nj\u00eb fjalkalim t\u00eb ri p\u00ebr llogarin\u00ebn t\u00ebnde Kerreore.",
+  reset_new_password: "Fjalkalimi i ri (8+ shkronja)",
+  reset_confirm_password: "Konfirmo fjalkalimin",
+  reset_submit: "Ruaj fjalkalimin e ri",
+  reset_success: "Fjalkalimi u ndryshua. Po t\u00eb ridrejtojm\u00eb te identifikimi\u2026",
+  reset_too_short: "Fjalkalimi duhet t\u00eb k\u00eb\u00e7t\u00eb t\u00eb pakt\u00eb 8 shkronja.",
+  reset_mismatch: "Fjalkalimet nuk p\u00ebrputhen.",
+  reset_invalid_link: "Ky lidhje rivendosjeje \u00ebsht\u00eb e pavlefshme ose ka skaduar. K\u00ebrko nj\u00eb tjet\u00ebr nga faqja e identifikimit.",
+  reset_back_to_login: "Kthehu te identifikimi",
+
   lang_name: "Shqip",
 };
 
@@ -258,6 +269,13 @@ const en: Dict = {
   admin_published: "Published", admin_pending: "Pending review", admin_unpublish: "Unpublish", admin_approve: "Approve",
   admin_no_listings: "No vehicle listings yet.",
   admin_footer_note: "Authorization is enforced server-side; moderation updates are protected by Supabase RLS.",
+
+  reset_title: "Reset your password", reset_subtitle: "Set a new password for your Kerreore account.",
+  reset_new_password: "New password (8+ characters)", reset_confirm_password: "Confirm password",
+  reset_submit: "Save new password", reset_success: "Password changed. Redirecting you to sign in\u2026",
+  reset_too_short: "Password must be at least 8 characters.", reset_mismatch: "Passwords don't match.",
+  reset_invalid_link: "This reset link is invalid or has expired. Request a new one from the sign-in page.",
+  reset_back_to_login: "Back to sign in",
 
   lang_name: "English",
 };
