@@ -1,12 +1,26 @@
 import { ArrowRight, CalendarDays, CarFront, MapPin, ShieldCheck, Star } from "lucide-react";
 import Link from "next/link";
-import { cars } from "@/lib/cars";
+import { createClient } from "@/lib/supabase/server";
 import { getServerLang } from "@/lib/i18n/lang-server";
 import { t } from "@/lib/i18n/dictionary";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default async function Home() {
   const lang = await getServerLang();
+  const supabase = await createClient();
+  const { data: cars } = await supabase
+    .from("kerreore_vehicles")
+    .select("id,make,model,year,hourly_rate,location,transmission,fuel,seats")
+    .eq("published", true)
+    .order("created_at", { ascending: false })
+    .limit(3);
+  const ids = (cars ?? []).map((c) => c.id);
+  const { data: images } = ids.length
+    ? await supabase.from("kerreore_vehicle_images").select("vehicle_id,storage_path,sort_order").in("vehicle_id", ids).order("sort_order")
+    : ({ data: [] } as any);
+  const firstImage = new Map<string, string>();
+  (images ?? []).forEach((i: any) => { if (!firstImage.has(String(i.vehicle_id))) firstImage.set(String(i.vehicle_id), `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/kerreore-vehicles/${i.storage_path}`); });
+
   return (
     <main className="min-h-screen overflow-hidden">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-6 md:px-8">
@@ -46,26 +60,32 @@ export default async function Home() {
           <div><p className="mb-2 text-xs font-black uppercase tracking-[0.18em] text-black/40">{t(lang, "home_near_you")}</p><h2 className="text-3xl font-black tracking-[-0.04em] md:text-4xl">{t(lang, "home_cars_ready")}</h2></div>
           <Link href="/cars" className="hidden items-center gap-2 text-sm font-bold md:flex">{t(lang, "home_view_all")} <ArrowRight size={16}/></Link>
         </div>
-        <div className="grid gap-5 md:grid-cols-3">
-          {cars.slice(0, 3).map((car) => (
-            <Link href={`/cars/${car.id}`} key={car.id} className="group overflow-hidden rounded-3xl border border-black/8 bg-white">
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#e8e8e2]">
-                <img src={car.image} alt={car.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105"/>
-                <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-xs font-black backdrop-blur">{t(lang, "home_available_now")}</div>
-              </div>
-              <div className="p-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div><h3 className="font-black">{car.name}</h3><p className="mt-1 text-sm text-black/50">{car.year} \u00b7 {car.transmission} \u00b7 {car.seats} {t(lang, "home_seats")}</p></div>
-                  <div className="flex items-center gap-1 text-sm font-bold"><Star size={14} fill="currentColor"/> {car.rating}</div>
-                </div>
-                <div className="mt-5 flex items-end justify-between border-t border-black/8 pt-4">
-                  <div><span className="text-2xl font-black">\u20ac{car.price}</span><span className="text-sm text-black/45"> {t(lang, "home_per_hour")}</span></div>
-                  <span className="rounded-full bg-black px-4 py-2 text-sm font-bold text-white">{t(lang, "home_view_car")}</span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {cars?.length ? (
+          <div className="grid gap-5 md:grid-cols-3">
+            {cars.map((car) => {
+              const image = firstImage.get(car.id);
+              return (
+                <Link href={`/cars/${car.id}`} key={car.id} className="group overflow-hidden rounded-3xl border border-black/8 bg-white">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-[#e8e8e2]">
+                    {image ? <img src={image} alt={`${car.make} ${car.model}`} className="h-full w-full object-cover transition duration-500 group-hover:scale-105"/> : <div className="grid h-full place-items-center"><CarFront size={44}/></div>}
+                    <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1.5 text-xs font-black backdrop-blur">{t(lang, "home_available_now")}</div>
+                  </div>
+                  <div className="p-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <div><h3 className="font-black">{car.make} {car.model}</h3><p className="mt-1 text-sm text-black/50">{car.year} \u00b7 {car.transmission} \u00b7 {car.seats} {t(lang, "home_seats")}</p></div>
+                    </div>
+                    <div className="mt-5 flex items-end justify-between border-t border-black/8 pt-4">
+                      <div><span className="text-2xl font-black">\u20ac{car.hourly_rate}</span><span className="text-sm text-black/45"> {t(lang, "home_per_hour")}</span></div>
+                      <span className="rounded-full bg-black px-4 py-2 text-sm font-bold text-white">{t(lang, "home_view_car")}</span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-dashed border-black/15 bg-white p-12 text-center"><p className="font-black">{t(lang, "cars_no_cars_title")}</p><p className="mt-2 text-sm text-black/45">{t(lang, "cars_no_cars_desc")}</p></div>
+        )}
       </section>
 
       <section id="how" className="mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-20">
