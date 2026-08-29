@@ -26,6 +26,8 @@ export function translateError(raw: string | null | undefined, lang: Lang): stri
     [/cannot book your own vehicle/, "Nuk mund t\u00eb rezervosh makin\u00ebn t\u00ebnde.", "You cannot book your own vehicle."],
     [/invalid provider status transition/, "Ky veprim s'lejohet p\u00ebr ofruesin n\u00eb k\u00ebt\u00eb status rezervimi.", "That action isn't allowed for this booking's current status."],
     [/invalid renter cancellation/, "Ky rezervim nuk mund t\u00eb anulohet n\u00eb k\u00ebt\u00eb status.", "This booking can't be cancelled in its current status."],
+    [/already paid/, "Ky rezervim \u00ebsht\u00eb paguar tashm\u00eb.", "This booking has already been paid."],
+    [/not configured/, "Pagesat nuk jan\u00eb aktivizuar ende. Kontakto administrat\u00ebn.", "Payments aren't enabled yet. Please contact the administrator."],
     [/booking not found/, "Rezervimi nuk u gjet.", "Booking not found."],
     [/not authorized/, "Nuk ke autorizim p\u00ebr k\u00ebt\u00eb veprim.", "You're not authorized to do that."],
     [/authentication required/, "Duhet t\u00eb identifikohesh p\u00ebr k\u00ebt\u00eb veprim.", "You need to sign in to do that."],
