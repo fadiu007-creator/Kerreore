@@ -19,8 +19,8 @@ export function translateError(raw: string | null | undefined, lang: Lang): stri
     [/vehicle is already booked/, "Kjo makin\u00eb \u00ebsht\u00eb e rezervuar tashm\u00eb p\u00ebr k\u00ebt\u00eb koh\u00eb.", "This vehicle is already booked for that time."],
     [/outside provider availability/, "Ky orar \u00ebsht\u00eb jasht\u00eb disponueshm\u00ebris\u00eb s\u00eb ofruesit.", "That time is outside the provider's availability."],
     [/between 1 and 24 hours/, "Rezervimet duhet t\u00eb jen\u00eb midis 1 dhe 24 or\u00ebsh.", "Bookings must be between 1 and 24 hours."],
-    [/start and end on the same day/, "Rezervimi duhet t\u00eb fillojë dhe t\u00eb mbaroj\u00eb t\u00eb nj\u00ebjt\u00ebn dit\u00eb.", "The booking must start and end on the same day."],
-    [/start in the future/, "Rezervimi duhet t\u00eb fillojë n\u00eb t\u00eb ardhmen.", "The booking must start in the future."],
+    [/start and end on the same day/, "Rezervimi duhet t\u00eb filloj\u00eb dhe t\u00eb mbaroj\u00eb t\u00eb nj\u00ebjt\u00ebn dit\u00eb.", "The booking must start and end on the same day."],
+    [/start in the future/, "Rezervimi duhet t\u00eb filloj\u00eb n\u00eb t\u00eb ardhmen.", "The booking must start in the future."],
     [/end time must be after start time/, "Ora e mbarimit duhet t\u00eb jet\u00eb pas or\u00ebs s\u00eb fillimit.", "End time must be after start time."],
     [/vehicle is not available/, "Kjo makin\u00eb nuk \u00ebsht\u00eb e disponueshme.", "This vehicle is not available."],
     [/cannot book your own vehicle/, "Nuk mund t\u00eb rezervosh makin\u00ebn t\u00ebnde.", "You cannot book your own vehicle."],
@@ -40,5 +40,5 @@ export function translateError(raw: string | null | undefined, lang: Lang): stri
   for (const [pattern, sqMsg, enMsg] of rules) {
     if (pattern.test(m)) return sq ? sqMsg : enMsg;
   }
-  return sq ? "Dic\u00ebka shkoi keq. Provo p\u00ebrs\u00ebri." : "Something went wrong. Please try again.";
+  return sq ? "Di\u00e7ka shkoi keq. Provo p\u00ebrs\u00ebri." : "Something went wrong. Please try again.";
 }
