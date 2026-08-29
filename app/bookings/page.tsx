@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Banknote, CreditCard, XCircle } from "lucide-react";
+import { ArrowLeft, Banknote, CreditCard, Landmark, XCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/browser";
 import { useLang } from "@/lib/i18n/lang-client";
 import { t } from "@/lib/i18n/dictionary";
@@ -17,6 +17,7 @@ export default function MyBookings() {
   const [msg, setMsg] = useState("");
   const [payingId, setPayingId] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [bankInfo, setBankInfo] = useState<Record<string, { iban: string; holder: string } | null>>({});
 
   async function load() {
     const { data: { user } } = await supabase.auth.getUser();
@@ -58,6 +59,18 @@ export default function MyBookings() {
     load();
   }
 
+  async function payBank(id: string) {
+    setBusyId(id);
+    const { error } = await supabase.rpc("kerreore_set_payment_method", { p_booking_id: id, p_method: "bank_transfer" });
+    if (error) { setMsg(translateError(error.message, lang)); setBusyId(null); return; }
+    const { data, error: instrError } = await supabase.rpc("kerreore_get_payment_instructions", { p_booking_id: id });
+    const row = Array.isArray(data) ? data[0] : data;
+    if (instrError || !row?.bank_iban) setBankInfo((s) => ({ ...s, [id]: null }));
+    else setBankInfo((s) => ({ ...s, [id]: { iban: row.bank_iban, holder: row.bank_holder_name } }));
+    setPayingId(null); setBusyId(null);
+    load();
+  }
+
   if (loading) return <main className="grid min-h-screen place-items-center">{t(lang, "car_loading")}</main>;
 
   return (
@@ -75,7 +88,8 @@ export default function MyBookings() {
         <div className="mt-8 space-y-3">
           {rows.map((b) => {
             const canPay = b.payment_status === "unpaid" && (b.status === "pending" || b.status === "confirmed");
-            const payBadge = b.payment_status === "paid" ? t(lang, "bookings_payment_paid") : b.payment_provider === "cash" ? t(lang, "bookings_payment_cash_pending") : t(lang, "bookings_payment_unpaid");
+            const payBadge = b.payment_status === "paid" ? t(lang, "bookings_payment_paid") : b.payment_provider === "cash" ? t(lang, "bookings_payment_cash_pending") : b.payment_provider === "bank_transfer" ? t(lang, "bookings_payment_bank_pending") : t(lang, "bookings_payment_unpaid");
+            const bank = bankInfo[b.id];
             return (
               <div key={b.id} className="rounded-3xl border border-black/8 bg-white p-5">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -96,10 +110,23 @@ export default function MyBookings() {
                 </div>
                 {canPay && payingId === b.id && (
                   <div className="mt-4 flex flex-col gap-2 rounded-2xl bg-[#f7f7f4] p-4 sm:flex-row">
-                    <p className="text-xs font-black text-black/50 sm:hidden">{t(lang, "bookings_choose_payment")}</p>
                     <button disabled={busyId === b.id} onClick={() => payCard(b.id)} className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-black px-4 py-3 text-sm font-black text-white disabled:opacity-50"><CreditCard size={16}/> {t(lang, "bookings_pay_card")}</button>
+                    <button disabled={busyId === b.id} onClick={() => payBank(b.id)} className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-black disabled:opacity-50"><Landmark size={16}/> {t(lang, "bookings_pay_bank")}</button>
                     <button disabled={busyId === b.id} onClick={() => payCash(b.id)} className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-black disabled:opacity-50"><Banknote size={16}/> {t(lang, "bookings_pay_cash")}</button>
                   </div>
+                )}
+                {b.payment_provider === "bank_transfer" && b.payment_status === "unpaid" && (
+                  bank ? (
+                    <div className="mt-4 rounded-2xl border border-black/10 bg-[#f7f7f4] p-4 text-sm">
+                      <p className="font-black">{t(lang, "bank_instructions_title")}</p>
+                      <p className="mt-2">{t(lang, "bank_holder")}: <b>{bank.holder}</b></p>
+                      <p className="mt-1">IBAN: <b className="font-mono">{bank.iban}</b></p>
+                      <p className="mt-1">{t(lang, "bank_reference")}: <b className="font-mono">{b.id.slice(0, 8).toUpperCase()}</b></p>
+                      <p className="mt-2 text-xs text-black/45">{t(lang, "bank_instructions_note")}</p>
+                    </div>
+                  ) : bank === null ? (
+                    <p className="mt-4 rounded-2xl bg-red-50 p-4 text-sm font-bold text-red-700">{t(lang, "bank_not_set_up")}</p>
+                  ) : null
                 )}
               </div>
             );
