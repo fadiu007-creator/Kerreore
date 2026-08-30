@@ -24,7 +24,8 @@ export default function NewCarPage() {
     const { data: car, error: ce } = await supabase.from("kerreore_vehicles").insert({
       owner_id: user.id, make: f.get("make"), model: f.get("model"), year: Number(f.get("year")),
       hourly_rate: Number(f.get("rate")), location: f.get("location"), description: f.get("description"),
-      transmission: f.get("transmission"), fuel: f.get("fuel"), seats: Number(f.get("seats")), published: false,
+      transmission: f.get("transmission"), fuel: f.get("fuel"), seats: Number(f.get("seats")),
+      deposit_amount: Number(f.get("deposit") || 0), published: false,
     }).select().single();
     if (ce || !car) { setError(translateError(ce?.message, lang)); setBusy(false); return; }
     const rules = [0,1,2,3,4,5,6].map((weekday) => ({ vehicle_id: car.id, weekday, start_time: f.get(`start_${weekday}`), end_time: f.get(`end_${weekday}`) }));
@@ -59,8 +60,8 @@ export default function NewCarPage() {
         <p className="mt-3 text-black/50">{t(lang, "new_car_subtitle")}</p>
         <form onSubmit={submit} className="mt-8 space-y-6 rounded-[2rem] border border-black/8 bg-white p-6 md:p-8">
           <div className="grid gap-4 md:grid-cols-2">
-            {[["make", t(lang, "new_car_make"), "Volkswagen"], ["model", t(lang, "new_car_model"), "Golf 8"], ["year", t(lang, "new_car_year"), "2023"], ["rate", t(lang, "new_car_rate"), "15"], ["location", t(lang, "new_car_location"), "Prishtin\u00eb"], ["seats", t(lang, "new_car_seats"), "5"]].map(([n, l, p]) => (
-              <label key={n} className="text-sm font-bold">{l}<input name={n} required type={n === "year" || n === "rate" || n === "seats" ? "number" : "text"} min={n === "rate" || n === "seats" ? "1" : undefined} className="mt-2 w-full rounded-2xl border border-black/10 bg-[#f7f7f4] p-4 outline-none" placeholder={p}/></label>
+            {[["make", t(lang, "new_car_make"), "Volkswagen"], ["model", t(lang, "new_car_model"), "Golf 8"], ["year", t(lang, "new_car_year"), "2023"], ["rate", t(lang, "new_car_rate"), "15"], ["location", t(lang, "new_car_location"), "Prishtin\u00eb"], ["seats", t(lang, "new_car_seats"), "5"], ["deposit", t(lang, "new_car_deposit"), "0"]].map(([n, l, p]) => (
+              <label key={n} className="text-sm font-bold">{l}<input name={n} required={n !== "deposit"} type={n === "year" || n === "rate" || n === "seats" || n === "deposit" ? "number" : "text"} min={n === "rate" || n === "seats" || n === "deposit" ? "0" : undefined} className="mt-2 w-full rounded-2xl border border-black/10 bg-[#f7f7f4] p-4 outline-none" placeholder={p}/></label>
             ))}
           </div>
           <div className="grid gap-4 md:grid-cols-2">

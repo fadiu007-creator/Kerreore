@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Banknote, CreditCard, Landmark, XCircle } from "lucide-react";
+import { ArrowLeft, XCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/browser";
 import { useLang } from "@/lib/i18n/lang-client";
 import { t } from "@/lib/i18n/dictionary";
 import { translateError } from "@/lib/i18n/errors";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import BookingExtras from "@/components/BookingExtras";
 const KOSOVO_TZ = "Europe/Belgrade";
 
 export default function MyBookings() {
@@ -24,7 +25,7 @@ export default function MyBookings() {
     if (!user) { location.href = "/login"; return; }
     const { data } = await supabase
       .from("kerreore_bookings")
-      .select("id,starts_at,ends_at,total_amount,status,payment_status,payment_provider,kerreore_vehicles(make,model,location)")
+      .select("id,starts_at,ends_at,total_amount,status,payment_status,payment_provider,dispute_status,deposit_amount,deposit_status,kerreore_vehicles(make,model,location)")
       .eq("renter_id", user.id)
       .order("starts_at", { ascending: false });
     setRows(data ?? []);
@@ -78,7 +79,7 @@ export default function MyBookings() {
       <header className="border-b border-black/8 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-5">
           <Link href="/" className="flex items-center gap-2 text-sm font-bold"><ArrowLeft size={16}/> {t(lang, "nav_home")}</Link>
-          <div className="flex items-center gap-3"><LanguageSwitcher/><Link href="/cars" className="rounded-full border border-black/10 px-4 py-2 text-sm font-bold">{t(lang, "nav_browse")}</Link></div>
+          <div className="flex items-center gap-3"><LanguageSwitcher/><Link href="/verify-id" className="rounded-full border border-black/10 px-4 py-2 text-sm font-bold">{t(lang, "provider_verify_link")}</Link><Link href="/cars" className="rounded-full border border-black/10 px-4 py-2 text-sm font-bold">{t(lang, "nav_browse")}</Link></div>
         </div>
       </header>
       <section className="mx-auto max-w-5xl px-5 py-10">
@@ -110,9 +111,9 @@ export default function MyBookings() {
                 </div>
                 {canPay && payingId === b.id && (
                   <div className="mt-4 flex flex-col gap-2 rounded-2xl bg-[#f7f7f4] p-4 sm:flex-row">
-                    <button disabled={busyId === b.id} onClick={() => payCard(b.id)} className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-black px-4 py-3 text-sm font-black text-white disabled:opacity-50"><CreditCard size={16}/> {t(lang, "bookings_pay_card")}</button>
-                    <button disabled={busyId === b.id} onClick={() => payBank(b.id)} className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-black disabled:opacity-50"><Landmark size={16}/> {t(lang, "bookings_pay_bank")}</button>
-                    <button disabled={busyId === b.id} onClick={() => payCash(b.id)} className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-black disabled:opacity-50"><Banknote size={16}/> {t(lang, "bookings_pay_cash")}</button>
+                    <button disabled={busyId === b.id} onClick={() => payCard(b.id)} className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-black px-4 py-3 text-sm font-black text-white disabled:opacity-50">{t(lang, "bookings_pay_card")}</button>
+                    <button disabled={busyId === b.id} onClick={() => payBank(b.id)} className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-black disabled:opacity-50">{t(lang, "bookings_pay_bank")}</button>
+                    <button disabled={busyId === b.id} onClick={() => payCash(b.id)} className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-black disabled:opacity-50">{t(lang, "bookings_pay_cash")}</button>
                   </div>
                 )}
                 {b.payment_provider === "bank_transfer" && b.payment_status === "unpaid" && (
@@ -128,6 +129,7 @@ export default function MyBookings() {
                     <p className="mt-4 rounded-2xl bg-red-50 p-4 text-sm font-bold text-red-700">{t(lang, "bank_not_set_up")}</p>
                   ) : null
                 )}
+                <BookingExtras bookingId={b.id} lang={lang} role="renter" status={b.status} endsAt={b.ends_at} disputeStatus={b.dispute_status} depositAmount={Number(b.deposit_amount)} depositStatus={b.deposit_status} onChanged={load} />
               </div>
             );
           })}

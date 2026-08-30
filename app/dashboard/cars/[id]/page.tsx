@@ -27,7 +27,7 @@ export default function ManageCar() {
   async function save(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); setBusy(true);
     const f = new FormData(e.currentTarget);
-    const { error } = await supabase.from("kerreore_vehicles").update({ make: f.get("make"), model: f.get("model"), year: Number(f.get("year")), hourly_rate: Number(f.get("rate")), location: f.get("location"), description: f.get("description"), transmission: f.get("transmission"), fuel: f.get("fuel"), seats: Number(f.get("seats")) }).eq("id", id);
+    const { error } = await supabase.from("kerreore_vehicles").update({ make: f.get("make"), model: f.get("model"), year: Number(f.get("year")), hourly_rate: Number(f.get("rate")), location: f.get("location"), description: f.get("description"), transmission: f.get("transmission"), fuel: f.get("fuel"), seats: Number(f.get("seats")), deposit_amount: Number(f.get("deposit") || 0) }).eq("id", id);
     if (error) setError(translateError(error.message, lang)); else setError(t(lang, "manage_saved"));
     setBusy(false);
   }
@@ -51,7 +51,7 @@ export default function ManageCar() {
         <p className="text-xs font-black uppercase tracking-[.18em] text-black/40">{t(lang, "manage_label")}</p>
         <h1 className="mt-2 text-4xl font-black">{c.make} {c.model}</h1>
         <form onSubmit={save} className="mt-8 space-y-5 rounded-[2rem] border border-black/8 bg-white p-6">
-          <div className="grid gap-4 md:grid-cols-2">{[["make", t(lang, "new_car_make"), c.make], ["model", t(lang, "new_car_model"), c.model], ["year", t(lang, "new_car_year"), c.year], ["rate", t(lang, "new_car_rate"), c.hourly_rate], ["location", t(lang, "new_car_location"), c.location], ["seats", t(lang, "new_car_seats"), c.seats]].map(([n, l, v]) => <label key={n} className="text-sm font-bold">{l}<input name={n} defaultValue={v as any} required type={n === "year" || n === "rate" || n === "seats" ? "number" : "text"} className="mt-2 w-full rounded-2xl border border-black/10 bg-[#f7f7f4] p-4"/></label>)}</div>
+          <div className="grid gap-4 md:grid-cols-2">{[["make", t(lang, "new_car_make"), c.make], ["model", t(lang, "new_car_model"), c.model], ["year", t(lang, "new_car_year"), c.year], ["rate", t(lang, "new_car_rate"), c.hourly_rate], ["location", t(lang, "new_car_location"), c.location], ["seats", t(lang, "new_car_seats"), c.seats], ["deposit", t(lang, "manage_deposit"), c.deposit_amount ?? 0]].map(([n, l, v]) => <label key={n} className="text-sm font-bold">{l}<input name={n} defaultValue={v as any} required={n !== "deposit"} type={n === "year" || n === "rate" || n === "seats" || n === "deposit" ? "number" : "text"} min={n === "deposit" ? "0" : undefined} className="mt-2 w-full rounded-2xl border border-black/10 bg-[#f7f7f4] p-4"/></label>)}</div>
           <div className="grid gap-4 md:grid-cols-2">
             <label className="text-sm font-bold">{t(lang, "manage_transmission")}<select name="transmission" defaultValue={c.transmission} className="mt-2 w-full rounded-2xl border border-black/10 bg-[#f7f7f4] p-4"><option>Automatic</option><option>Manual</option></select></label>
             <label className="text-sm font-bold">{t(lang, "manage_fuel")}<select name="fuel" defaultValue={c.fuel} className="mt-2 w-full rounded-2xl border border-black/10 bg-[#f7f7f4] p-4"><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></label>
