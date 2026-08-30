@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
 async function requireAdmin() {
@@ -18,6 +19,7 @@ export async function moderateVehicle(formData: FormData) {
   if (!id) return;
   const db = await requireAdmin();
   await db.from("kerreore_vehicles").update({ published }).eq("id", id);
+  revalidatePath("/admin");
 }
 
 export async function reviewIdVerification(formData: FormData) {
@@ -26,6 +28,7 @@ export async function reviewIdVerification(formData: FormData) {
   if (!userId) return;
   const db = await requireAdmin();
   await db.rpc("kerreore_review_id_verification", { p_user_id: userId, p_approve: approve });
+  revalidatePath("/admin");
 }
 
 export async function resolveDisputeAction(formData: FormData) {
@@ -34,6 +37,7 @@ export async function resolveDisputeAction(formData: FormData) {
   if (!bookingId) return;
   const db = await requireAdmin();
   await db.rpc("kerreore_resolve_dispute", { p_booking_id: bookingId, p_resolution: resolution });
+  revalidatePath("/admin");
 }
 
 export async function signOutAdmin() {
