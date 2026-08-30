@@ -27,10 +27,22 @@ export default function BankDetailsPage() {
 
   async function save(e: React.FormEvent) {
     e.preventDefault(); setBusy(true); setMsg("");
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-    const { error } = await supabase.from("kerreore_profiles").update({ bank_iban: iban.trim(), bank_holder_name: holder.trim() }).eq("id", user.id);
-    setMsg(error ? translateError(error.message, lang) : t(lang, "bank_saved"));
+    const { data: { user }, error: userErr } = await supabase.auth.getUser();
+    if (userErr || !user) { location.href = "/login"; return; }
+    // IMPORTANT: .select().single() after .update() is required here, not
+    // optional -- without it, supabase-js/PostgREST returns success even
+    // when RLS or an auth mismatch causes zero rows to actually match the
+    // update, silently discarding the write while still reporting "saved".
+    // .single() forces a real error when the affected-row count isn't
+    // exactly 1, so a genuine failure is never shown to the user as success.
+    const { data, error } = await supabase
+      .from("kerreore_profiles")
+      .update({ bank_iban: iban.trim(), bank_holder_name: holder.trim() })
+      .eq("id", user.id)
+      .select("id,bank_iban,bank_holder_name")
+      .single();
+    if (error || !data) setMsg(translateError(error?.message || "permission denied", lang));
+    else setMsg(t(lang, "bank_saved"));
     setBusy(false);
   }
 
