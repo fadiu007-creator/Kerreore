@@ -16,6 +16,8 @@ const sq: Dict = {
   nav_browse: "Shfleto",
   nav_bookings: "Rezervimet",
   nav_sign_out: "Dil",
+  nav_terms: "Kushtet",
+  nav_privacy: "Privatësia",
 
   home_badge: "Makina me or\u00eb",
   home_title_1: "Udh\u00ebtimi yt i radh\u00ebs",
@@ -94,6 +96,7 @@ const sq: Dict = {
   car_default_description: "Nj\u00eb automjet i listuar nga nj\u00eb ofrues, i disponueshm\u00ebm p\u00ebr qira me or\u00eb.",
   car_booking_created: "K\u00ebrkesa p\u00ebr rezervim u krijua. Ofruesi duhet ta konfirmoj\u00eb.",
   car_no_reviews: "Ende pa vler\u00ebsime",
+  car_reviews_count: (n: number) => `${n} vler\u00ebsim${n === 1 ? "" : "e"}`,
 
   new_car_label: "Konfigurimi i ofruesit",
   new_car_title: "Listo makin\u00ebn t\u00ebnde",
@@ -231,6 +234,18 @@ const sq: Dict = {
   deposit_claim: "Mbaje depozit\u00ebn (d\u00ebm)",
   deposit_claim_note_ph: "Arsyeja e mbajtjes s\u00eb depozit\u00ebs\u2026",
 
+  notif_title: "Njoftimet",
+  notif_none: "Ende s'ka njoftime.",
+  notif_mark_all: "Sh\u00ebno t\u00eb gjitha si t\u00eb lexuara",
+  notif_booking_new: "K\u00ebrkes\u00eb e re p\u00ebr rezervim",
+  notif_booking_confirmed: "Rezervimi u konfirmua",
+  notif_booking_cancelled: "Rezervimi u anulua",
+  notif_message: "Mesazh i ri",
+  notif_dispute_open: "U raportua nj\u00eb konflikt",
+  notif_dispute_resolved: "Konflikti u zgjidh",
+  notif_id_verified: "Identiteti u verifikua",
+  notif_id_rejected: "Verifikimi i identitetit u refuzua",
+
   admin_sign_out: "Dil",
   admin_operations: "Operacione",
   admin_title: "Paneli i administrat\u00ebs",
@@ -260,6 +275,12 @@ const sq: Dict = {
   admin_disputes_none: "Ende s'ka konflikte t\u00eb hapura.",
   admin_dispute_resolve: "Sh\u00ebno si t\u00eb zgjidhur",
   admin_dispute_resolution_ph: "Shkruaj zgjidhjen\u2026",
+  admin_analytics_title: "Analitika",
+  admin_analytics_revenue_30d: "T\u00eb ardhura (30 dit\u00ebt e fundit)",
+  admin_analytics_bookings_30d: "Rezervime (30 dit\u00ebt e fundit)",
+  admin_analytics_verified_users: "P\u00ebrdorues t\u00eb verifikuar",
+  admin_analytics_avg_rating: "Vler\u00ebsimi mesatar",
+  admin_analytics_top_vehicles: "Automjetet m\u00eb t\u00eb rezervuara",
 
   reset_title: "Rivendos fjalkalimin",
   reset_subtitle: "Vendos nj\u00eb fjalkalim t\u00eb ri p\u00ebr llogarin\u00ebn t\u00ebnde Kerreore.",
@@ -272,12 +293,15 @@ const sq: Dict = {
   reset_invalid_link: "Ky lidhje rivendosjeje \u00ebsht\u00eb e pavlefshme ose ka skaduar. K\u00ebrko nj\u00eb tjet\u00ebr nga faqja e identifikimit.",
   reset_back_to_login: "Kthehu te identifikimi",
 
+  legal_draft_note: "Ky \u00ebsht\u00eb nj\u00eb draft standard dhe nuk p\u00ebrb\u00ebn k\u00ebshill\u00eb ligjore. Rekomandohet shqyrtim nga nj\u00eb avokat para p\u00ebrdorimit real.",
+
   lang_name: "Shqip",
 };
 
 const en: Dict = {
   nav_find_car: "Find a car", nav_how: "How it works", nav_list_car: "List your car", nav_sign_in: "Sign in",
   nav_home: "Home", nav_cars: "Cars", nav_back: "Back", nav_browse: "Browse", nav_bookings: "Bookings", nav_sign_out: "Sign out",
+  nav_terms: "Terms", nav_privacy: "Privacy",
 
   home_badge: "Cars by the hour", home_title_1: "Your next drive", home_title_2: "is closer than you think.",
   home_subtitle: "Rent great cars from people around you. Book only the hours you need, without the rental-counter hassle.",
@@ -314,6 +338,7 @@ const en: Dict = {
   car_weekly_note: "Provider-defined weekly availability", car_default_description: "A provider-listed vehicle available for hourly rental.",
   car_booking_created: "Booking request created. The provider must confirm it.",
   car_no_reviews: "No reviews yet",
+  car_reviews_count: (n: number) => `${n} review${n === 1 ? "" : "s"}`,
 
   new_car_label: "Provider setup", new_car_title: "List your car",
   new_car_subtitle: "Your listing is submitted for admin review before it becomes public.",
@@ -417,6 +442,18 @@ const en: Dict = {
   deposit_claim: "Claim deposit (damage)",
   deposit_claim_note_ph: "Reason for claiming the deposit\u2026",
 
+  notif_title: "Notifications",
+  notif_none: "No notifications yet.",
+  notif_mark_all: "Mark all as read",
+  notif_booking_new: "New booking request",
+  notif_booking_confirmed: "Booking confirmed",
+  notif_booking_cancelled: "Booking cancelled",
+  notif_message: "New message",
+  notif_dispute_open: "Dispute reported",
+  notif_dispute_resolved: "Dispute resolved",
+  notif_id_verified: "Identity verified",
+  notif_id_rejected: "Identity verification rejected",
+
   admin_sign_out: "Sign out", admin_operations: "Operations", admin_title: "Admin dashboard",
   admin_subtitle: "Protected by Supabase Auth and database RLS.", admin_stat_users: "Users",
   admin_stat_published: "Published cars", admin_stat_total: "Total listings", admin_stat_review: "Needs review",
@@ -433,6 +470,12 @@ const en: Dict = {
   admin_disputes_none: "No open disputes.",
   admin_dispute_resolve: "Mark resolved",
   admin_dispute_resolution_ph: "Write the resolution\u2026",
+  admin_analytics_title: "Analytics",
+  admin_analytics_revenue_30d: "Revenue (last 30 days)",
+  admin_analytics_bookings_30d: "Bookings (last 30 days)",
+  admin_analytics_verified_users: "Verified users",
+  admin_analytics_avg_rating: "Average rating",
+  admin_analytics_top_vehicles: "Most-booked vehicles",
 
   reset_title: "Reset your password", reset_subtitle: "Set a new password for your Kerreore account.",
   reset_new_password: "New password (8+ characters)", reset_confirm_password: "Confirm password",
@@ -440,6 +483,8 @@ const en: Dict = {
   reset_too_short: "Password must be at least 8 characters.", reset_mismatch: "Passwords don't match.",
   reset_invalid_link: "This reset link is invalid or has expired. Request a new one from the sign-in page.",
   reset_back_to_login: "Back to sign in",
+
+  legal_draft_note: "This is a standard draft and not legal advice. Have a lawyer review it before real-world use.",
 
   lang_name: "English",
 };
