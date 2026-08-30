@@ -20,6 +20,22 @@ export async function moderateVehicle(formData: FormData) {
   await db.from("kerreore_vehicles").update({ published }).eq("id", id);
 }
 
+export async function reviewIdVerification(formData: FormData) {
+  const userId = String(formData.get("user_id") ?? "");
+  const approve = formData.get("approve") === "true";
+  if (!userId) return;
+  const db = await requireAdmin();
+  await db.rpc("kerreore_review_id_verification", { p_user_id: userId, p_approve: approve });
+}
+
+export async function resolveDisputeAction(formData: FormData) {
+  const bookingId = String(formData.get("booking_id") ?? "");
+  const resolution = String(formData.get("resolution") ?? "");
+  if (!bookingId) return;
+  const db = await requireAdmin();
+  await db.rpc("kerreore_resolve_dispute", { p_booking_id: bookingId, p_resolution: resolution });
+}
+
 export async function signOutAdmin() {
   const db = await createClient();
   await db.auth.signOut();
