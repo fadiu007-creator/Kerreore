@@ -18,8 +18,16 @@ export default async function Home() {
   const { data: images } = ids.length
     ? await supabase.from("kerreore_vehicle_images").select("vehicle_id,storage_path,sort_order").in("vehicle_id", ids).order("sort_order")
     : ({ data: [] } as any);
+  const { data: reviews } = ids.length
+    ? await supabase.from("kerreore_reviews").select("vehicle_id,rating").in("vehicle_id", ids).eq("direction", "renter_to_owner")
+    : ({ data: [] } as any);
   const firstImage = new Map<string, string>();
   (images ?? []).forEach((i: any) => { if (!firstImage.has(String(i.vehicle_id))) firstImage.set(String(i.vehicle_id), `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/kerreore-vehicles/${i.storage_path}`); });
+  const ratingByVehicle = new Map<string, { avg: number; count: number }>();
+  (reviews ?? []).forEach((r: any) => {
+    const cur = ratingByVehicle.get(r.vehicle_id) ?? { avg: 0, count: 0 };
+    ratingByVehicle.set(r.vehicle_id, { avg: (cur.avg * cur.count + r.rating) / (cur.count + 1), count: cur.count + 1 });
+  });
 
   return (
     <main className="min-h-screen overflow-hidden">
@@ -64,6 +72,7 @@ export default async function Home() {
           <div className="grid gap-5 md:grid-cols-3">
             {cars.map((car) => {
               const image = firstImage.get(car.id);
+              const rating = ratingByVehicle.get(car.id);
               return (
                 <Link href={`/cars/${car.id}`} key={car.id} className="group overflow-hidden rounded-3xl border border-black/8 bg-white">
                   <div className="relative aspect-[4/3] overflow-hidden bg-[#e8e8e2]">
@@ -72,10 +81,13 @@ export default async function Home() {
                   </div>
                   <div className="p-5">
                     <div className="flex items-start justify-between gap-4">
-                      <div><h3 className="font-black">{car.make} {car.model}</h3><p className="mt-1 text-sm text-black/50">{car.year} · {car.transmission} · {car.seats} {t(lang, "home_seats")}</p></div>
+                      <div><h3 className="font-black">{car.make} {car.model}</h3><p className="mt-1 text-sm text-black/50">{car.year} \u00b7 {car.transmission} \u00b7 {car.seats} {t(lang, "home_seats")}</p></div>
                     </div>
-                    <div className="mt-5 flex items-end justify-between border-t border-black/8 pt-4">
-                      <div><span className="text-2xl font-black">€{car.hourly_rate}</span><span className="text-sm text-black/45"> {t(lang, "home_per_hour")}</span></div>
+                    <div className="mt-2 flex items-center gap-1 text-xs font-bold">
+                      {rating ? (<><Star size={13} fill="currentColor"/> {rating.avg.toFixed(1)} \u00b7 {t(lang, "car_reviews_count", rating.count)}</>) : <span className="text-black/40">{t(lang, "car_no_reviews")}</span>}
+                    </div>
+                    <div className="mt-3 flex items-end justify-between border-t border-black/8 pt-4">
+                      <div><span className="text-2xl font-black">\u20ac{car.hourly_rate}</span><span className="text-sm text-black/45"> {t(lang, "home_per_hour")}</span></div>
                       <span className="rounded-full bg-black px-4 py-2 text-sm font-bold text-white">{t(lang, "home_view_car")}</span>
                     </div>
                   </div>
@@ -104,7 +116,11 @@ export default async function Home() {
         </div>
       </section>
       <footer className="border-t border-black/8 px-5 py-8 text-sm text-black/45">
-        <div className="mx-auto flex max-w-7xl justify-between"><span className="font-black text-black">kerreore.</span><span>{t(lang, "home_footer")}</span></div>
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
+          <span className="font-black text-black">kerreore.</span>
+          <span>{t(lang, "home_footer")}</span>
+          <div className="flex gap-4 text-xs font-bold"><Link href="/terms" className="hover:underline">{t(lang, "nav_terms")}</Link><Link href="/privacy" className="hover:underline">{t(lang, "nav_privacy")}</Link></div>
+        </div>
       </footer>
     </main>
   );
