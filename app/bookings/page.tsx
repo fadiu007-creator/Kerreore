@@ -7,6 +7,7 @@ import { useLang } from "@/lib/i18n/lang-client";
 import { t } from "@/lib/i18n/dictionary";
 import { translateError } from "@/lib/i18n/errors";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import NotificationBell from "@/components/NotificationBell";
 import BookingExtras from "@/components/BookingExtras";
 const KOSOVO_TZ = "Europe/Belgrade";
 
@@ -79,7 +80,7 @@ export default function MyBookings() {
       <header className="border-b border-black/8 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-5">
           <Link href="/" className="flex items-center gap-2 text-sm font-bold"><ArrowLeft size={16}/> {t(lang, "nav_home")}</Link>
-          <div className="flex items-center gap-3"><LanguageSwitcher/><Link href="/verify-id" className="rounded-full border border-black/10 px-4 py-2 text-sm font-bold">{t(lang, "provider_verify_link")}</Link><Link href="/cars" className="rounded-full border border-black/10 px-4 py-2 text-sm font-bold">{t(lang, "nav_browse")}</Link></div>
+          <div className="flex items-center gap-3"><NotificationBell/><LanguageSwitcher/><Link href="/verify-id" className="rounded-full border border-black/10 px-4 py-2 text-sm font-bold">{t(lang, "provider_verify_link")}</Link><Link href="/cars" className="rounded-full border border-black/10 px-4 py-2 text-sm font-bold">{t(lang, "nav_browse")}</Link></div>
         </div>
       </header>
       <section className="mx-auto max-w-5xl px-5 py-10">
