@@ -97,6 +97,7 @@ const sq: Dict = {
   car_booking_created: "K\u00ebrkesa p\u00ebr rezervim u krijua. Ofruesi duhet ta konfirmoj\u00eb.",
   car_no_reviews: "Ende pa vler\u00ebsime",
   car_reviews_count: (n: number) => `${n} vler\u00ebsim${n === 1 ? "" : "e"}`,
+  car_insured_badge: "Sigurimi i verifikuar",
 
   new_car_label: "Konfigurimi i ofruesit",
   new_car_title: "Listo makin\u00ebn t\u00ebnde",
@@ -146,6 +147,18 @@ const sq: Dict = {
   manage_saving: "Duke ruajtur\u2026",
   manage_saved: "U ruajt. Meq\u00eb e ndryshove shpalljen, duhet p\u00ebrs\u00ebri miratim nga administrata.",
   manage_deposit: "Depozita e sigurisë (\u20ac)",
+
+  insurance_label: "Siguria e udh\u00ebtimit",
+  insurance_title: "Prova e sigurimit",
+  insurance_subtitle: "Sigurimi TPL \u00ebsht\u00eb i detyrueshm\u00ebm n\u00eb Kosov\u00eb, por zakonisht nuk mbulon vet\u00eb automjetin ose p\u00ebrdorimin komercial (me qira). Ngarko nj\u00eb dokument q\u00eb tregon se polica jote mbulon dh\u00ebnien me qira t\u00eb automjetit.",
+  insurance_status_none: "Pa dokument",
+  insurance_status_pending: "N\u00eb pritje t\u00eb shqyrtimit",
+  insurance_status_verified: "I verifikuar",
+  insurance_status_rejected: "U refuzua \u2014 provo p\u00ebrs\u00ebri",
+  insurance_choose_file: "Zgjidh dokumentin e sigurimit",
+  insurance_submit: "D\u00ebrgo p\u00ebr shqyrtim",
+  insurance_submitting: "Duke d\u00ebrguar\u2026",
+  insurance_submitted: "U d\u00ebrgua p\u00ebr shqyrtim.",
 
   bookings_label: "Rezervimet e mia",
   bookings_title: "Qirat\u00eb e tua",
@@ -245,6 +258,8 @@ const sq: Dict = {
   notif_dispute_resolved: "Konflikti u zgjidh",
   notif_id_verified: "Identiteti u verifikua",
   notif_id_rejected: "Verifikimi i identitetit u refuzua",
+  notif_insurance_verified: "Sigurimi u verifikua",
+  notif_insurance_rejected: "Verifikimi i sigurimit u refuzua",
 
   admin_sign_out: "Dil",
   admin_operations: "Operacione",
@@ -281,6 +296,10 @@ const sq: Dict = {
   admin_analytics_verified_users: "P\u00ebrdorues t\u00eb verifikuar",
   admin_analytics_avg_rating: "Vler\u00ebsimi mesatar",
   admin_analytics_top_vehicles: "Automjetet m\u00eb t\u00eb rezervuara",
+  admin_insurance_review_title: "Verifikimet e sigurimit n\u00eb pritje",
+  admin_insurance_approve: "Miro",
+  admin_insurance_reject: "Refuzo",
+  admin_insurance_none: "Ende s'ka verifikime sigurimi n\u00eb pritje.",
 
   reset_title: "Rivendos fjalkalimin",
   reset_subtitle: "Vendos nj\u00eb fjalkalim t\u00eb ri p\u00ebr llogarin\u00ebn t\u00ebnde Kerreore.",
@@ -339,6 +358,7 @@ const en: Dict = {
   car_booking_created: "Booking request created. The provider must confirm it.",
   car_no_reviews: "No reviews yet",
   car_reviews_count: (n: number) => `${n} review${n === 1 ? "" : "s"}`,
+  car_insured_badge: "Insurance verified",
 
   new_car_label: "Provider setup", new_car_title: "List your car",
   new_car_subtitle: "Your listing is submitted for admin review before it becomes public.",
@@ -363,6 +383,18 @@ const en: Dict = {
   manage_delete: "Delete", manage_delete_confirm: "Delete this vehicle and its bookings?", manage_save: "Save changes",
   manage_saving: "Saving\u2026", manage_saved: "Saved. Because you edited the listing, it will require admin review again.",
   manage_deposit: "Security deposit (\u20ac)",
+
+  insurance_label: "Trip safety",
+  insurance_title: "Insurance proof",
+  insurance_subtitle: "TPL insurance is mandatory in Kosovo, but typically doesn't cover the vehicle itself or commercial (rental) use. Upload a document showing your policy covers renting out this vehicle.",
+  insurance_status_none: "No document",
+  insurance_status_pending: "Pending review",
+  insurance_status_verified: "Verified",
+  insurance_status_rejected: "Rejected \u2014 try again",
+  insurance_choose_file: "Choose insurance document",
+  insurance_submit: "Submit for review",
+  insurance_submitting: "Submitting\u2026",
+  insurance_submitted: "Submitted for review.",
 
   bookings_label: "My bookings", bookings_title: "Your rentals", bookings_cancel: "Cancel", bookings_none: "No bookings yet.",
   bookings_browse: "Browse cars",
@@ -453,6 +485,8 @@ const en: Dict = {
   notif_dispute_resolved: "Dispute resolved",
   notif_id_verified: "Identity verified",
   notif_id_rejected: "Identity verification rejected",
+  notif_insurance_verified: "Insurance verified",
+  notif_insurance_rejected: "Insurance verification rejected",
 
   admin_sign_out: "Sign out", admin_operations: "Operations", admin_title: "Admin dashboard",
   admin_subtitle: "Protected by Supabase Auth and database RLS.", admin_stat_users: "Users",
@@ -476,6 +510,10 @@ const en: Dict = {
   admin_analytics_verified_users: "Verified users",
   admin_analytics_avg_rating: "Average rating",
   admin_analytics_top_vehicles: "Most-booked vehicles",
+  admin_insurance_review_title: "Pending insurance verifications",
+  admin_insurance_approve: "Approve",
+  admin_insurance_reject: "Reject",
+  admin_insurance_none: "No pending insurance verifications.",
 
   reset_title: "Reset your password", reset_subtitle: "Set a new password for your Kerreore account.",
   reset_new_password: "New password (8+ characters)", reset_confirm_password: "Confirm password",
