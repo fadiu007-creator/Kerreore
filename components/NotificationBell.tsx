@@ -14,6 +14,8 @@ const TITLE_KEY: Record<string, string> = {
   dispute_resolved: "notif_dispute_resolved",
   id_verified: "notif_id_verified",
   id_rejected: "notif_id_rejected",
+  insurance_verified: "notif_insurance_verified",
+  insurance_rejected: "notif_insurance_rejected",
 };
 
 export default function NotificationBell() {

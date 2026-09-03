@@ -31,6 +31,15 @@ export async function reviewIdVerification(formData: FormData) {
   revalidatePath("/admin");
 }
 
+export async function reviewInsurance(formData: FormData) {
+  const vehicleId = String(formData.get("vehicle_id") ?? "");
+  const approve = formData.get("approve") === "true";
+  if (!vehicleId) return;
+  const db = await requireAdmin();
+  await db.rpc("kerreore_review_insurance", { p_vehicle_id: vehicleId, p_approve: approve });
+  revalidatePath("/admin");
+}
+
 export async function resolveDisputeAction(formData: FormData) {
   const bookingId = String(formData.get("booking_id") ?? "");
   const resolution = String(formData.get("resolution") ?? "");
